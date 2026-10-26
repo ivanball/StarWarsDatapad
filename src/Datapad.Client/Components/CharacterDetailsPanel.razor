@@ -1,0 +1,107 @@
+@implements IDisposable
+@inject IDatapadApi Api
+
+@if (Id is null)
+{
+  <section class="details-card">
+    <p class="state">Select a character to see their details.</p>
+  </section>
+}
+else if (_error is not null)
+{
+  <section class="details-card">
+    <div class="state state--error" role="alert">
+      <p>@_error</p>
+      @if (!_notFound)
+      {
+        <button type="button" @onclick="LoadAsync">Retry</button>
+      }
+    </div>
+  </section>
+}
+else if (_details is null)
+{
+  <section class="details-card">
+    <p class="state" role="status">Loading character...</p>
+  </section>
+}
+else
+{
+  var c = _details;
+  <PageTitle>@c.Name - Star Wars Character Datapad</PageTitle>
+
+  <section class="details-card" aria-labelledby="character-name">
+    <div class="details-card__header">
+      <Placeholder Kind="PlaceholderKind.Avatar" />
+      <h2 id="character-name">@c.Name</h2>
+    </div>
+
+    <div class="details-card__columns">
+      <section aria-labelledby="attributes-heading">
+        <h3 id="attributes-heading" class="section-title">Attributes</h3>
+        <table class="attributes">
+          <tbody>
+            <tr><th scope="row">Birth year</th><td>@Display.Text(c.Attributes.BirthYear)</td></tr>
+            <tr><th scope="row">Gender</th><td>@Display.Text(c.Attributes.Gender)</td></tr>
+            <tr><th scope="row">Height</th><td>@Display.Number(c.Attributes.Height, " cm")</td></tr>
+            <tr><th scope="row">Mass</th><td>@Display.Number(c.Attributes.Mass, " kg")</td></tr>
+            <tr><th scope="row">Eye color</th><td>@Display.Text(c.Attributes.EyeColor)</td></tr>
+            <tr><th scope="row">Hair color</th><td>@Display.Text(c.Attributes.HairColor)</td></tr>
+            <tr><th scope="row">Skin color</th><td>@Display.Text(c.Attributes.SkinColor)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-labelledby="species-heading">
+        <h3 id="species-heading" class="section-title">Species</h3>
+        @if (IsUnavailable(DetailSection.Species))
+        {
+          <SectionUnavailable What="Species" OnRetry="LoadAsync" />
+        }
+        else if (c.Species.Count == 0)
+        {
+          <p class="state">Species not recorded in SWAPI.</p>
+        }
+        else
+        {
+          @foreach (var species in c.Species)
+          {
+            <FactCard Title="@species.Name" Facts="@SpeciesFacts(species)" />
+          }
+        }
+      </section>
+
+      <section aria-labelledby="homeworld-heading">
+        <h3 id="homeworld-heading" class="section-title">Homeworld</h3>
+        @if (IsUnavailable(DetailSection.Homeworld))
+        {
+          <SectionUnavailable What="Homeworld" OnRetry="LoadAsync" />
+        }
+        else if (c.Homeworld is null)
+        {
+          <p class="state">Homeworld unknown.</p>
+        }
+        else
+        {
+          <FactCard Title="@c.Homeworld.Name" Facts="@PlanetFacts(c.Homeworld)" />
+        }
+      </section>
+    </div>
+  </section>
+
+  <div class="related">
+    <FilmStrip Films="@c.Films" Unavailable="@IsUnavailable(DetailSection.Films)" OnRetry="LoadAsync" />
+    <div class="related__craft">
+      <CraftList Title="Starships"
+                 Items="@c.Starships"
+                 EmptyText="@($"{c.Name} does not pilot any starships.")"
+                 Unavailable="@IsUnavailable(DetailSection.Starships)"
+                 OnRetry="LoadAsync" />
+      <CraftList Title="Vehicles"
+                 Items="@c.Vehicles"
+                 EmptyText="@($"{c.Name} does not pilot any vehicles.")"
+                 Unavailable="@IsUnavailable(DetailSection.Vehicles)"
+                 OnRetry="LoadAsync" />
+    </div>
+  </div>
+}

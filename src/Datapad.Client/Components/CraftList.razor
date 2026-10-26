@@ -1,0 +1,50 @@
+@* Starships or vehicles the character pilots. *@
+<section class="related-section" aria-labelledby="@HeadingId">
+  <h3 id="@HeadingId" class="section-title">@Title</h3>
+  @if (Unavailable)
+  {
+    <SectionUnavailable What="@Title" OnRetry="OnRetry" />
+  }
+  else if (Items.Count == 0)
+  {
+    <p class="state">@EmptyText</p>
+  }
+  else
+  {
+    <ul class="craft-list">
+      @foreach (var craft in Items)
+      {
+        <li class="craft">
+          <Placeholder Kind="PlaceholderKind.Craft" />
+          <dl class="craft__facts">
+            <dt class="craft__name">@craft.Name</dt>
+            <dd>@Display.Text(craft.Class)</dd>
+            <dt>Crew / Passengers:</dt>
+            <dd>@Display.Pair(craft.Crew, craft.Passengers)</dd>
+            <dt>Model / Manufacturer:</dt>
+            <dd>@Display.Pair(craft.Model, craft.Manufacturer)</dd>
+          </dl>
+        </li>
+      }
+    </ul>
+  }
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<CraftInfo> Items { get; set; } = [];
+
+    [Parameter, EditorRequired]
+    public string EmptyText { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Unavailable { get; set; }
+
+    [Parameter]
+    public EventCallback OnRetry { get; set; }
+
+    private string HeadingId => $"{Title.ToLowerInvariant()}-heading";
+}

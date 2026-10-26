@@ -1,0 +1,19 @@
+@* A titled card of label/value pairs, used for species and homeworld. *@
+<div class="fact-card">
+  <h4 class="fact-card__title">@Title</h4>
+  <dl class="fact-card__facts">
+    @foreach (var (label, value) in Facts)
+    {
+      <dt>@label</dt>
+      <dd>@value</dd>
+    }
+  </dl>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<(string Label, string Value)> Facts { get; set; } = [];
+}
