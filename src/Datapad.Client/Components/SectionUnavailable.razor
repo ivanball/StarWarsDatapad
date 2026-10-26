@@ -1,0 +1,13 @@
+@* Shown inside one section when the API could not load it; the rest of the character still renders. *@
+<div class="section-unavailable" role="status">
+  <span>@What could not be loaded right now.</span>
+  <button type="button" @onclick="OnRetry">Retry</button>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string What { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback OnRetry { get; set; }
+}

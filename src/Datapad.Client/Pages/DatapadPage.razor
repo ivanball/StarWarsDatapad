@@ -14,9 +14,10 @@
     <CharacterList Search="@_search" SelectedId="@Id" />
   </section>
 
-  <section class="details" aria-label="Character details">
-    <p class="state">Select a character to see their details.</p>
-  </section>
+  @* display: contents, so the details card and the related sections sit directly in the page grid. *@
+  <div class="details-slot">
+    <CharacterDetailsPanel Id="@Id" />
+  </div>
 </main>
 
 @code {

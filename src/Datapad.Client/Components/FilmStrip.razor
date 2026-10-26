@@ -1,0 +1,40 @@
+@* Every film in episode order; the ones the character is not in are dimmed, as in the wireframe. *@
+<section class="related-section" aria-labelledby="films-heading">
+  <h3 id="films-heading" class="section-title">Films</h3>
+  @if (Unavailable)
+  {
+    <SectionUnavailable What="Films" OnRetry="OnRetry" />
+  }
+  else if (Films.Count == 0)
+  {
+    <p class="state">No films found.</p>
+  }
+  else
+  {
+    <ul class="film-strip">
+      @foreach (var film in Films)
+      {
+        <li class="film @(film.FeaturesCharacter ? null : "film--absent")">
+          <Placeholder Kind="PlaceholderKind.Film" />
+          <span class="film__title">@film.Title</span>
+          <span class="film__episode">@Display.Episode(film.EpisodeId)</span>
+          @if (!film.FeaturesCharacter)
+          {
+            <span class="visually-hidden">(does not appear)</span>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<FilmInfo> Films { get; set; } = [];
+
+    [Parameter]
+    public bool Unavailable { get; set; }
+
+    [Parameter]
+    public EventCallback OnRetry { get; set; }
+}
