@@ -1,0 +1,19 @@
+<div class="search" role="search">
+  <label for="character-search" class="visually-hidden">Search characters</label>
+  <input id="character-search"
+         type="search"
+         placeholder="Search characters"
+         autocomplete="off"
+         value="@Value"
+         @oninput="OnInputAsync" />
+</div>
+
+@code {
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    private Task OnInputAsync(ChangeEventArgs e) => ValueChanged.InvokeAsync(e.Value?.ToString() ?? string.Empty);
+}

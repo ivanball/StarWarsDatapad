@@ -1,0 +1,79 @@
+@implements IDisposable
+@inject IDatapadApi Api
+
+@if (_error is not null)
+{
+  <div class="state state--error" role="alert">
+    <p>@_error</p>
+    <button type="button" @onclick="LoadAsync">Retry</button>
+  </div>
+}
+else if (_characters is null)
+{
+  <p class="state" role="status">Loading characters...</p>
+}
+else
+{
+  var visible = CharacterFilter.Apply(_characters, Search);
+  if (visible.Count == 0)
+  {
+    <p class="state" role="status">
+      @(string.IsNullOrWhiteSpace(Search) ? "No characters found." : $"No characters match \"{Search.Trim()}\".")
+    </p>
+  }
+  else
+  {
+    <nav aria-label="Characters">
+      <ul class="character-list">
+        @foreach (var character in visible)
+        {
+          var selected = character.Id == SelectedId;
+          <li>
+            <a href="characters/@character.Id"
+               class="@(selected ? "selected" : null)"
+               aria-current="@(selected ? "page" : null)">@character.Name</a>
+          </li>
+        }
+      </ul>
+    </nav>
+  }
+}
+
+@code {
+    private readonly CancellationTokenSource _disposed = new();
+    private IReadOnlyList<CharacterSummary>? _characters;
+    private string? _error;
+
+    /// <summary>Text from the search box; filtering happens here, in the browser.</summary>
+    [Parameter]
+    public string? Search { get; set; }
+
+    [Parameter]
+    public int? SelectedId { get; set; }
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _error = null;
+        _characters = null;
+        try
+        {
+            _characters = await Api.GetCharactersAsync(_disposed.Token);
+        }
+        catch (DatapadApiException ex)
+        {
+            _error = ex.Message;
+        }
+        catch (OperationCanceledException) when (_disposed.IsCancellationRequested)
+        {
+            // The component went away mid-request; nothing to render.
+        }
+    }
+
+    public void Dispose()
+    {
+        _disposed.Cancel();
+        _disposed.Dispose();
+    }
+}
