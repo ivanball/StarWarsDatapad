@@ -1,0 +1,16 @@
+<Project>
+  <ItemGroup>
+    <!-- Runtime -->
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.11.0" />
+
+    <!-- Tests -->
+    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <PackageVersion Include="bunit" Version="2.13.3" />
+    <!-- Transitive through bUnit; pinned to the version bUnit 2.13.3 declares so audit stays clean. -->
+    <PackageVersion Include="AngleSharp" Version="1.8.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.14" />
+  </ItemGroup>
+</Project>

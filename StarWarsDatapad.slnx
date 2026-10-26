@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Datapad.Api/Datapad.Api.csproj" />
+    <Project Path="src/Datapad.Client/Datapad.Client.csproj" />
+    <Project Path="src/Datapad.Contracts/Datapad.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Datapad.Api.Tests/Datapad.Api.Tests.csproj" />
+    <Project Path="tests/Datapad.Client.Tests/Datapad.Client.Tests.csproj" />
+  </Folder>
+</Solution>
