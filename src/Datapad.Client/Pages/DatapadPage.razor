@@ -1,0 +1,28 @@
+@page "/"
+@page "/characters/{Id:int}"
+
+<PageTitle>Star Wars Character Datapad</PageTitle>
+
+<header class="topbar">
+  <h1>Star Wars Character Datapad</h1>
+  <SearchBox @bind-Value="_search" />
+</header>
+
+<main class="layout">
+  <section class="characters" aria-labelledby="characters-heading">
+    <h2 id="characters-heading" class="section-title">Characters</h2>
+    <CharacterList Search="@_search" SelectedId="@Id" />
+  </section>
+
+  <section class="details" aria-label="Character details">
+    <p class="state">Select a character to see their details.</p>
+  </section>
+</main>
+
+@code {
+    private string _search = string.Empty;
+
+    /// <summary>The selected character, from the URL, so a selection can be bookmarked or shared.</summary>
+    [Parameter]
+    public int? Id { get; set; }
+}
