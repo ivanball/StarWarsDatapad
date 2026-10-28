@@ -7,6 +7,13 @@ appear in, and the starships and vehicles they pilot.
 Built with .NET 10: a Blazor WebAssembly front end served by an ASP.NET Core backend-for-frontend (BFF) that
 talks to SWAPI.
 
+## See also: v2
+
+This repo is the answer inside the exercise's timebox. A second implementation,
+[`../StarWarsDatapad-2`](../StarWarsDatapad-2) (a sibling folder; the GitHub link will be added here when it
+is published), keeps exactly the same features and UX and shows how the design scales: explicit layers with
+an enforced dependency rule, ADRs for each structural decision, and a test project per layer.
+
 ## Run it
 
 Prerequisite: the [.NET 10 SDK](https://dotnet.microsoft.com/download) (10.0.100 or later; `global.json`
