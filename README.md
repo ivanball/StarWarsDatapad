@@ -264,7 +264,3 @@ how I checked it.
     search, Luke's details, the not-found and no-match states). That run caught a real hosting issue (static
     files are not served when the build output runs in Production without publishing), now documented above.
   - A published Release build run end to end.
-- **What I would point a reviewer to first:** the cancellation and stale-response logic in
-  `CharacterDetailsPanel`, the exception filters in `SwapiClient` (a caller's cancellation passes through;
-  network, JSON and `HttpClient` timeout failures become "unavailable"), and why `CachedSwapiClient` is scoped, so it
-  never holds a typed `HttpClient` inside a singleton.
