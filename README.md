@@ -10,8 +10,7 @@ talks to SWAPI.
 ## See also: v2
 
 This repo is the answer inside the exercise's timebox. A second implementation,
-[`../StarWarsDatapad-2`](../StarWarsDatapad-2) (a sibling folder; the GitHub link will be added here when it
-is published), keeps exactly the same features and UX and shows how the design scales: explicit layers with
+[StarWarsDatapad-2](https://github.com/ivanball/StarWarsDatapad-2), keeps exactly the same features and UX and shows how the design scales: explicit layers with
 an enforced dependency rule, ADRs for each structural decision, and a test project per layer.
 
 ## Run it
