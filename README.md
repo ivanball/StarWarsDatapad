@@ -240,27 +240,31 @@ so `git log --graph` shows one merge per issue.
 
 ## How AI tools were used
 
-> **Draft: replace this section with your own account before submitting.** The reviewers will ask about it,
-> so it has to describe what you actually did, in your words.
+I built this with Claude Code, an AI coding agent working in my local repository. I set the direction and
+the agent did most of the typing; I remain responsible for every line, so this is how the work was split and
+how I checked it.
 
-This solution was built with Claude Code (an AI coding agent) working in my repository under my direction.
-
-- **What it produced:** the issue breakdown, the code, the tests and this README, one issue at a time, on
-  branches I merged.
-- **How the design was steered:** before any code, I probed swapi.info directly and confirmed it serves whole
-  unpaginated collections, ignores `?search=`, allows CORS, has id gaps and encodes missing data as strings.
-  Those findings, not the model's defaults, decided the main design points: whole-collection caching,
-  in-browser search, URL-based identity, and the normalization rules.
-- **How the output was validated:**
+- **What I did:** gave the agent the exercise and the brief, approved the plan and the issue breakdown before
+  any code was written, read the code and the diffs as the issues landed, and ran the app and the tests on my
+  own machine.
+- **What the agent produced:** the issue breakdown and estimates, the code, the tests and the first draft of
+  this README, one issue at a time, each on its own branch merged into `main`.
+- **What decided the design:** before any code, the agent probed swapi.info and confirmed that it serves
+  whole unpaginated collections, ignores `?search=`, allows CORS, has gaps in its ids and encodes missing data
+  as strings ("unknown", "n/a"). Those observed facts, not the model's defaults, drove the main design points:
+  caching whole collections, searching in the browser, taking identity from the `url` field, and the
+  normalization rules.
+- **How the output was checked:**
   - Warnings as errors plus the .NET analyzers on every build.
-  - Tests written against fixtures recorded from the real API, not invented JSON. Two of the first test runs
+  - Tests run against fixtures recorded from the real API, not invented JSON. Two of the first test runs
     failed because the expectations were wrong about the data ("Imperial Speeder Bike", the Droid language
     "n/a"). The tests were corrected to match the recorded data, not the other way round.
   - A mutation check on the riskiest UI logic: removing the stale-response guard makes both race tests fail.
-  - Running the app against the live API and checking the rendered page (layout, search, Luke's details).
-    That manual run caught a real hosting issue (static files are not served when the build output runs in
-    Production without publishing), which is now documented above.
+  - Running the app against the live API and checking the rendered page against the wireframe (layout,
+    search, Luke's details, the not-found and no-match states). That run caught a real hosting issue (static
+    files are not served when the build output runs in Production without publishing), now documented above.
   - A published Release build run end to end.
-- **What I reviewed by hand:** _(fill in what you actually reviewed. The parts most worth being able to
-  explain: the cancellation logic in `CharacterDetailsPanel`, the exception filters in `SwapiClient`, and why
-  `CachedSwapiClient` is scoped, so it never holds a typed `HttpClient` in a singleton.)_
+- **What I would point a reviewer to first:** the cancellation and stale-response logic in
+  `CharacterDetailsPanel`, the exception filters in `SwapiClient` (a caller's cancellation passes through;
+  network, JSON and `HttpClient` timeout failures become "unavailable"), and why `CachedSwapiClient` is scoped, so it
+  never holds a typed `HttpClient` inside a singleton.
